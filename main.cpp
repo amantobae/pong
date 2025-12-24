@@ -6,6 +6,9 @@ using namespace std;
 const int screen_width = 1280;
 const int screen_height = 800;
 
+int player_score = 0;
+int cpu_score = 0;
+
 class Ball
 {
 public:
@@ -27,15 +30,46 @@ public:
         {
             speed_y = -speed_y;
         }
-        if (pos_x + radius >= screen_width || pos_x - radius <= 0)
+
+        if (pos_x + radius >= screen_width)
         {
-            speed_x = -speed_x;
+            cpu_score++;
+            ResetBall();
         }
+
+        if (pos_x - radius <= 0)
+        {
+            player_score++;
+            ResetBall();
+        }
+    }
+
+    void ResetBall()
+    {
+        pos_x = screen_width / 2;
+        pos_y = screen_height / 2;
+
+        int speed_choices[] = {-1, 1};
+        speed_x *= speed_choices[GetRandomValue(0, 1)];
+        speed_y *= speed_choices[GetRandomValue(0, 1)];
     }
 };
 
 class Paddle
 {
+protected:
+    void LimitMovement()
+    {
+        if (pos_y <= 0)
+        {
+            pos_y = 0;
+        }
+        if (pos_y + height >= screen_height)
+        {
+            pos_y = screen_height - height;
+        }
+    }
+
 public:
     float pos_x, pos_y;
     float width, height;
@@ -57,19 +91,26 @@ public:
             pos_y = pos_y - speed;
         }
 
-        if (pos_y <= 0)
-        {
-            pos_y = 0;
-        }
-        if (pos_y + height >= screen_height)
-        {
-            pos_y = screen_height - height;
-        }
+        LimitMovement();
     }
 };
 
 class CPU_Paddle : public Paddle
 {
+public:
+    void Update(int ball_y)
+    {
+        if (pos_y + height / 2 > ball_y)
+        {
+            pos_y = pos_y - speed;
+        }
+        if (pos_y + height / 2 <= ball_y)
+        {
+            pos_y = pos_y + speed;
+        }
+
+        LimitMovement();
+    }
 };
 
 Ball ball;
@@ -105,12 +146,25 @@ int main()
 
         ball.Update();
         player.Update();
+        CPU.Update(ball.pos_y);
+
+        if (CheckCollisionCircleRec({ball.pos_x, ball.pos_y}, ball.radius, {player.pos_x, player.pos_y, player.width, player.height}))
+        {
+            ball.speed_x = -ball.speed_x;
+        }
+        if (CheckCollisionCircleRec({ball.pos_x, ball.pos_y}, ball.radius, {CPU.pos_x, CPU.pos_y, CPU.width, CPU.height}))
+        {
+            ball.speed_x = -ball.speed_x;
+        }
 
         ClearBackground(BLACK);
         DrawLine(screen_width / 2.0f, 0, screen_width / 2.0f, screen_height, WHITE);
         ball.Draw();
         player.Draw();
         CPU.Draw();
+
+        DrawText(TextFormat("%i", cpu_score), screen_width / 4 - 20, 20, 80, WHITE);
+        DrawText(TextFormat("%i", player_score), 3 * (screen_width / 4 - 20), 20, 80, WHITE);
 
         EndDrawing();
     }
