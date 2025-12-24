@@ -1,0 +1,1 @@
+void draw_scores(int cpu_score, int player_score);
