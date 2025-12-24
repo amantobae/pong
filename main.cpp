@@ -34,7 +34,47 @@ public:
     }
 };
 
+class Paddle
+{
+public:
+    float pos_x, pos_y;
+    float width, height;
+    int speed;
+
+    void Draw()
+    {
+        DrawRectangle(pos_x, pos_y, width, height, WHITE);
+    }
+
+    void Update()
+    {
+        if (IsKeyDown(KEY_DOWN))
+        {
+            pos_y = pos_y + speed;
+        }
+        if (IsKeyDown(KEY_UP))
+        {
+            pos_y = pos_y - speed;
+        }
+
+        if (pos_y <= 0)
+        {
+            pos_y = 0;
+        }
+        if (pos_y + height >= screen_height)
+        {
+            pos_y = screen_height - height;
+        }
+    }
+};
+
+class CPU_Paddle : public Paddle
+{
+};
+
 Ball ball;
+Paddle player;
+CPU_Paddle CPU;
 
 int main()
 {
@@ -47,17 +87,30 @@ int main()
     ball.speed_x = 7;
     ball.speed_y = 7;
 
+    player.width = 25;
+    player.height = 120;
+    player.pos_x = screen_width - player.width - 10;
+    player.pos_y = screen_height / 2 - player.height / 2;
+    player.speed = 6;
+
+    CPU.width = 25;
+    CPU.height = 120;
+    CPU.pos_x = 10;
+    CPU.pos_y = screen_height / 2 - CPU.height / 2;
+    CPU.speed = 6;
+
     while (WindowShouldClose() == false)
     {
         BeginDrawing();
 
         ball.Update();
+        player.Update();
 
         ClearBackground(BLACK);
         DrawLine(screen_width / 2.0f, 0, screen_width / 2.0f, screen_height, WHITE);
         ball.Draw();
-        DrawRectangle(10.0f, screen_height / 2.0f - 60, 25.0f, 120.0f, WHITE);
-        DrawRectangle(screen_width - 35.0f, screen_height / 2.0f - 60, 25.0f, 120.0f, WHITE);
+        player.Draw();
+        CPU.Draw();
 
         EndDrawing();
     }
