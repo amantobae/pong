@@ -16,6 +16,12 @@ public:
     void Update();
 };
 
+class Player2_Paddle : public Paddle
+{
+public:
+    void Update();
+};
+
 class CPU_Paddle : public Paddle
 {
 public:

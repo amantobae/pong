@@ -19,13 +19,27 @@ void Paddle::Draw()
 
 void Paddle::Update()
 {
+    if (IsKeyDown(KEY_UP))
+    {
+        pos_y = pos_y - speed;
+    }
     if (IsKeyDown(KEY_DOWN))
     {
         pos_y = pos_y + speed;
     }
-    if (IsKeyDown(KEY_UP))
+
+    LimitMovement();
+}
+
+void Player2_Paddle::Update()
+{
+    if (IsKeyDown(KEY_W))
     {
         pos_y = pos_y - speed;
+    }
+    if (IsKeyDown(KEY_S))
+    {
+        pos_y = pos_y + speed;
     }
 
     LimitMovement();

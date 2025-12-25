@@ -58,7 +58,6 @@ void update()
 
 int main()
 {
-
     InitWindow(screen_width, screen_height, "Pong");
     SetTargetFPS(60);
 
