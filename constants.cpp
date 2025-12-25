@@ -5,3 +5,5 @@ const int screen_height = 800;
 
 int player_score = 0;
 int cpu_score = 0;
+
+const float screen_scale = 1.0f;
