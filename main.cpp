@@ -5,6 +5,7 @@
 #include "graphics.h"
 #include "game_init.h"
 #include "game.h"
+#include "assets.h"
 
 using namespace std;
 
@@ -20,6 +21,9 @@ void draw()
     {
     case menu_state:
         draw_menu();
+        break;
+    case game_mode_state:
+        draw_game_mode_menu();
         break;
     case in_game_state:
         ClearBackground(BLACK);
@@ -43,9 +47,11 @@ void update()
         ball.Update();
         player.Update();
         CPU.Update(ball.pos_y);
-
         ball.CheckPaddleCollision(player);
         ball.CheckPaddleCollision(CPU);
+        break;
+    case game_mode_state:
+        update_game_mode_menu();
         break;
     }
 }
@@ -58,6 +64,10 @@ int main()
 
     InitializeGameObjects(ball, player, CPU, screen_width, screen_height);
 
+    load_fonts();
+    load_textures();
+    load_sounds();
+
     while (WindowShouldClose() == false)
     {
         BeginDrawing();
@@ -67,6 +77,10 @@ int main()
 
         EndDrawing();
     }
+
+    unload_sounds();
+    unload_textures();
+    unload_fonts();
 
     CloseWindow();
     return 0;

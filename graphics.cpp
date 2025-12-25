@@ -76,10 +76,11 @@ void update_menu()
         {
         case 0:
             // Single Player
-            current_state = in_game_state;
+            current_state = game_mode_state;
             break;
         case 1:
             // Multiplayer
+            current_state = game_mode_state;
             break;
         case 2:
             // Settings
@@ -100,7 +101,7 @@ void draw_menu()
 
     const Text game_title = {
         "Pong",
-        {0.50f, 0.20f},
+        {0.50f, 0.1f},
         200.0f,
         WHITE,
         4.0f,
@@ -119,7 +120,7 @@ void draw_menu()
     draw_text(option1);
 
     const Text option2 = {
-        "Multiplayer",
+        "Local Multiplayer",
         {0.10f, 0.50f + (selected_menu_option == 1 ? offset : 0.0f)},
         50.0f,
         selected_menu_option == 1 ? GRAY : WHITE,
@@ -147,4 +148,79 @@ void draw_menu()
         &menu_font,
     };
     draw_text(option4);
+}
+
+static int selected_game_mode = 0;
+static const int GAME_MODE_MENU_OPTIONS_COUNT = 2;
+
+void update_game_mode_menu()
+{
+    if (IsKeyPressed(KEY_DOWN))
+    {
+        selected_game_mode = (selected_game_mode + 1) % GAME_MODE_MENU_OPTIONS_COUNT;
+    }
+
+    if (IsKeyPressed(KEY_UP))
+    {
+        selected_game_mode--;
+        if (selected_game_mode < 0)
+            selected_game_mode = GAME_MODE_MENU_OPTIONS_COUNT - 1;
+    }
+
+    if (IsKeyPressed(KEY_ESCAPE))
+    {
+        extern game_state current_state;
+        current_state = menu_state;
+    }
+
+    if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))
+    {
+        extern game_state current_state;
+        switch (selected_game_mode)
+        {
+        case 0:
+            current_state = in_game_state;
+            break;
+        case 1:
+            current_state = in_game_state;
+            break;
+        }
+    }
+}
+
+void draw_game_mode_menu()
+{
+    ClearBackground(BLACK);
+
+    float offset = std::sin(game_frame * 0.1f) * 0.01f;
+
+    const Text game_title = {
+        "Choose the Game Mode",
+        {0.10f, 0.10f},
+        100.0f,
+        WHITE,
+        4.0f,
+        &menu_font,
+    };
+    draw_text(game_title);
+
+    const Text option1 = {
+        "Classic Mode",
+        {0.10f, 0.40f + (selected_game_mode == 0 ? offset : 0.0f)},
+        50.0f,
+        selected_game_mode == 0 ? GRAY : WHITE,
+        4.0f,
+        &menu_font,
+    };
+    draw_text(option1);
+
+    const Text option2 = {
+        "Play with Modifications",
+        {0.10f, 0.50f + (selected_game_mode == 1 ? offset : 0.0f)},
+        50.0f,
+        selected_game_mode == 1 ? GRAY : WHITE,
+        4.0f,
+        &menu_font,
+    };
+    draw_text(option2);
 }
