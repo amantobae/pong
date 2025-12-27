@@ -2,7 +2,7 @@
 #include "ball.h"
 #include "paddle.h"
 
-void InitializeGameObjects(Ball &ball, Paddle &player, Paddle &cpu,
+void InitializeGameObjects(Ball &ball, Paddle &player, Paddle &cpu, Paddle &player2,
                            int screen_width, int screen_height)
 {
     ball.radius = 20;
@@ -22,4 +22,10 @@ void InitializeGameObjects(Ball &ball, Paddle &player, Paddle &cpu,
     cpu.pos_x = 10;
     cpu.pos_y = screen_height / 2 - cpu.height / 2;
     cpu.speed = 6;
+
+    player2.width = 25;
+    player2.height = 120;
+    player2.pos_x = 10;
+    player2.pos_y = screen_height / 2 - player2.height / 2;
+    player2.speed = 6;
 }

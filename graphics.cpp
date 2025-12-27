@@ -76,11 +76,11 @@ void update_menu()
         {
         case 0:
             // Single Player
-            current_state = game_mode_state;
+            current_state = single_player_state;
             break;
         case 1:
             // Multiplayer
-            current_state = game_mode_state;
+            current_state = multiplayer_state;
             break;
         case 2:
             // Settings
@@ -179,10 +179,24 @@ void update_game_mode_menu()
         switch (selected_game_mode)
         {
         case 0:
-            current_state = in_game_state;
+            if (current_state == single_player_state)
+            {
+                current_state = in_game_state;
+            }
+            else if (current_state == multiplayer_state)
+            {
+                current_state = in_multiplayer_game_state;
+            }
             break;
         case 1:
-            current_state = in_game_state;
+            if (current_state == single_player_state)
+            {
+                current_state = in_game_state;
+            }
+            else if (current_state == multiplayer_state)
+            {
+                current_state = in_multiplayer_game_state;
+            }
             break;
         }
     }
