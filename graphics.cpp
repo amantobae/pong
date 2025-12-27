@@ -16,6 +16,18 @@ struct Text
     Font *font = nullptr;
 };
 
+void check_state(game_state &current_state)
+{
+    if (current_state == single_player_state)
+    {
+        current_state = in_game_state;
+    }
+    else if (current_state == multiplayer_state)
+    {
+        current_state = in_multiplayer_game_state;
+    }
+}
+
 static int selected_menu_option = 0;
 static const int MENU_OPTIONS_COUNT = 4;
 
@@ -179,24 +191,10 @@ void update_game_mode_menu()
         switch (selected_game_mode)
         {
         case 0:
-            if (current_state == single_player_state)
-            {
-                current_state = in_game_state;
-            }
-            else if (current_state == multiplayer_state)
-            {
-                current_state = in_multiplayer_game_state;
-            }
+            check_state(current_state);
             break;
         case 1:
-            if (current_state == single_player_state)
-            {
-                current_state = in_game_state;
-            }
-            else if (current_state == multiplayer_state)
-            {
-                current_state = in_multiplayer_game_state;
-            }
+            check_state(current_state);
             break;
         }
     }
